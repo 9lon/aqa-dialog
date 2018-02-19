@@ -1,0 +1,36 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="test-el">
+    <template>
+        <style>
+             :host {
+                display: block
+            }
+        </style>
+        <h2>test</h2>
+    </template>
+
+    <script>
+        /**
+         * `test-el` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class TestEl extends Polymer.Element {
+
+            static get is() {
+                return 'test-el';
+            }
+
+            nylonDialogActive(){
+                console.log('active')
+                console.log(this._params)
+            }
+        }
+
+        window.customElements.define(TestEl.is, TestEl);
+    </script>
+</dom-module>
