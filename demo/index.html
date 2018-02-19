@@ -24,14 +24,18 @@
         <template>
           <button id="btn" onclick="openDailog()">open</button>
           <nylon-dialog id="modal" path="/a">
-            <div label="test A" path="/a">1</div>
+            <div label="test A" path="/a" class="x">1</div>
             <div label="test B" path="/b">2</div>
+            
           </nylon-dialog>
           <script>
             function openDailog(){
-              document.getElementById('modal').path= "/b";
               document.getElementById('modal').open()
             }
+
+            document.getElementById('modal').addEventListener('nylonDialogChanged',function(e){
+                console.log(e)
+              })
           </script>
         </template>
       </demo-snippet>

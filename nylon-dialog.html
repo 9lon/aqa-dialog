@@ -3,11 +3,10 @@
 <dom-module id="nylon-dialog">
   <template>
     <style>
-        #contentSlot > ::slotted(:not(slot):not(.iron-selected)) {
-          display: none !important;
-        }  
-
-        /* :host > ::slotted(:not(slot):not(.iron-selected)) {
+      #contentSlot> ::slotted(:not(slot):not(.nylon-selected)) {
+        display: none !important;
+      }
+      /* :host > ::slotted(:not(slot):not(.nylon-selected)) {
           display: none !important;
           background-color: #3399ff
       }   */
@@ -34,7 +33,6 @@
         /* width: 80%; */
         width: 50%;
       }
-      
       /* The Close Button */
 
       .close {
@@ -58,10 +56,10 @@
         <div id="contentSlot">
           <slot></slot>
         </div>
-        
+
       </div>
     </div>
-    
+
   </template>
 
   <script>
@@ -73,50 +71,81 @@
      * @polymer
      * @demo demo/index.html
      */
-    class NylonDialog extends Polymer.Element {
-      static get is() { return 'nylon-dialog'; }
-      static get properties() {
-        return {
-          opened: Boolean,
-          path: {
-            type: String,
-            observer: '_pathChanged'
-          },
-          label:String
-        };
-      }
-      ready(){
-        super.ready();
-        this.modal = this.$.modal;
-        var btnClose = this.$.close;
-        if(this.opened){
+
+      class NylonDialog extends Polymer.Element {
+        static get is() { return 'nylon-dialog'; }
+        static get properties() {
+          return {
+            opened: Boolean,
+            path: {
+              type: String,
+              observer: '_pathChanged'
+            },
+            label: String
+          };
+        }
+
+        constructor(){
+          super()
+          window.Nylon =  window.Nylon || {}
+          window.Nylon.dialog = {}
+
+          window.Nylon.dialog.open = (path,params) => {
+            this.close()
+            if(path){
+              this.params = params
+              this.path = path
+              this.open()
+            }
+          }
+          window.Nylon.dialog.close = () => {
+            this.close()
+          }
+        }
+
+        ready() {
+          super.ready();
+          this.modal = this.$.modal;
+          var btnClose = this.$.close;
+          if (this.opened) {
+            this.modal.style.display = 'block'
+          }
+        }
+
+        _pathChanged(val, old) {
+          for (var i = 0; i < this.children.length; i++) {
+            var element = this.children[i];
+            if (val == this.children[i].getAttribute('path')) {
+              if (element.getAttribute('label')) {
+                this.label = element.getAttribute('label');
+              }
+              element.classList.add('nylon-selected');
+              this.dispatchEvent(new CustomEvent('nylonDialogChanged', {detail: {element: element, params:this.params}}));
+              
+              this.children[i]._params = this.params
+
+              if(this.children[i].nylonDialogActive){ 
+                this.children[i].nylonDialogActive(this.params)
+              }
+
+            }
+            else {
+              
+              element.classList.remove('nylon-selected')
+            }
+          }
+        }
+
+        close() {
+          this.modal.style.display = 'none'
+
+        }
+        open() {
           this.modal.style.display = 'block'
         }
       }
 
-      _pathChanged(val,old){
-        for (var i = 0; i < this.children.length; i++) {
-          var element = this.children[i];
-          if(val == this.children[i].getAttribute('path')){
-            if(element.getAttribute('label')){
-              this.label = element.getAttribute('label');
-            }
-            element.classList.add('iron-selected');
-          }
-          else {
-            element.classList.remove('iron-selected')
-          } 
-        }
-      }
+      window.customElements.define(NylonDialog.is, NylonDialog);
 
-      close(){
-        this.modal.style.display = 'none'
-      }
-      open(){
-        this.modal.style.display = 'block'
-      }
-    }
-
-    window.customElements.define(NylonDialog.is, NylonDialog);
   </script>
 </dom-module>
