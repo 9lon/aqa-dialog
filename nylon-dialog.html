@@ -3,11 +3,65 @@
 <dom-module id="nylon-dialog">
   <template>
     <style>
-      :host {
-        display: block;
+        #contentSlot > ::slotted(:not(slot):not(.iron-selected)) {
+          display: none !important;
+        }  
+
+        /* :host > ::slotted(:not(slot):not(.iron-selected)) {
+          display: none !important;
+          background-color: #3399ff
+      }   */
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4)
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #fefefe;
+        border-radius: 4px;
+        margin: 2rem auto auto auto;
+        padding: 20px;
+        /* width: 80%; */
+        width: 50%;
+      }
+      
+      /* The Close Button */
+
+      .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <span class="close" id="close" on-click="close">&times;</span>
+        <p>[[label]]</p>
+        <div id="contentSlot">
+          <slot></slot>
+        </div>
+        
+      </div>
+    </div>
+    
   </template>
 
   <script>
@@ -23,11 +77,43 @@
       static get is() { return 'nylon-dialog'; }
       static get properties() {
         return {
-          prop1: {
+          opened: Boolean,
+          path: {
             type: String,
-            value: 'nylon-dialog'
-          }
+            observer: '_pathChanged'
+          },
+          label:String
         };
+      }
+      ready(){
+        super.ready();
+        this.modal = this.$.modal;
+        var btnClose = this.$.close;
+        if(this.opened){
+          this.modal.style.display = 'block'
+        }
+      }
+
+      _pathChanged(val,old){
+        for (var i = 0; i < this.children.length; i++) {
+          var element = this.children[i];
+          if(val == this.children[i].getAttribute('path')){
+            if(element.getAttribute('label')){
+              this.label = element.getAttribute('label');
+            }
+            element.classList.add('iron-selected');
+          }
+          else {
+            element.classList.remove('iron-selected')
+          } 
+        }
+      }
+
+      close(){
+        this.modal.style.display = 'none'
+      }
+      open(){
+        this.modal.style.display = 'block'
       }
     }
 
