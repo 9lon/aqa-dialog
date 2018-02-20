@@ -11,7 +11,7 @@
 
   <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="./test-el.html">
+  <link rel="lazy-import" href="./test-el.html">
   <link rel="import" href="../nylon-dialog.html">
   <link rel="import" href="../nylon-dialog-body.html">
   <link rel="import" href="../nylon-dialog-footer.html">
@@ -28,16 +28,10 @@
     <h3>Basic nylon-dialog demo</h3>
     <demo-snippet>
       <template>
+
         <button id="btn" onclick="openDailog()">open</button>
-        <nylon-dialog id="modal" path="/b">
-          <div label="test A" path="/a">
-            <div class="modal-body">
-              test
-            </div>
-            <div class="modal-footer">
-              <button>Save</button>
-            </div>
-          </div>
+        <nylon-dialog id="modal">
+          <test-el path-file="./test-el.html" label="test A" path="/a" lazy></test-el>
           <div label="ภาษาไทย" path="/b">
             <nylon-dialog-body>
               <div>test</div>
@@ -46,12 +40,15 @@
         </nylon-dialog>
         <script>
           function openDailog() {
-            document.getElementById('modal').open()
+            Nylon.dialog.open('/a')
           }
-
-          document.getElementById('modal').addEventListener('nylonDialogChanged', function (e) {
-            console.log(e)
+          
+          document.getElementById('modal').addEventListener('nylon-dialog-changed', function (e) {
+            Polymer.importHref(e.detail.element.getAttribute('path-file'),  ()=> {
+              e.detail.pass()
+            })
           })
+          
         </script>
       </template>
     </demo-snippet>

@@ -49,14 +49,14 @@
         font-weight: normal;
       }
 
-       #contentSlot> ::slotted(.modal-body) {
+        #contentSlot> ::slotted(.modal-body) {
         position: relative;
         -webkit-box-flex: 1;
         flex: 1 1 auto;
         padding: 1rem;
-      } 
+      }  
 
-       #contentSlot> ::slotted(.modal-footer) {
+       /* #contentSlot> ::slotted(.modal-footer) {
         display: flex;
         -webkit-box-align: center;
         align-items: center;
@@ -64,7 +64,7 @@
         justify-content: flex-end;
         padding: 1rem;
         border-top: 1px solid #e9ecef;
-      } 
+      }  */
       /* The Close Button */
 
       .close {
@@ -156,20 +156,28 @@
       }
 
       _pathChanged(val, old) {
-        for (var i = 0; i < this.children.length; i++) {
-          var element = this.children[i];
-          if (val == this.children[i].getAttribute('path')) {
+
+        for (let i = 0; i < this.children.length; i++) {
+          let element = this.children[i];
+
+          if (val == element.getAttribute('path')) {
+
+            const pass = _ =>{
+              element._params = this.params
+              if (element.nylonDialogActive) {
+                element.nylonDialogActive(this.params)
+              }
+            }
+
             if (element.getAttribute('label')) {
               this.label = element.getAttribute('label');
             }
             element.classList.add('nylon-selected');
-            this.dispatchEvent(new CustomEvent('nylon-dialog-changed', { detail: { element: element, params: this.params } }));
+            this.dispatchEvent(new CustomEvent('nylon-dialog-changed', { detail: { element: element, params: this.params, pass } }));
 
-            this.children[i]._params = this.params
+            if(element.getAttribute('lazy')==null)  pass()
 
-            if (this.children[i].nylonDialogActive) {
-              this.children[i].nylonDialogActive(this.params)
-            }
+            
 
           }
           else {
