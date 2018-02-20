@@ -49,14 +49,14 @@
         font-weight: normal;
       }
 
-      /* .modal-body {
+       #contentSlot> ::slotted(.modal-body) {
         position: relative;
         -webkit-box-flex: 1;
         flex: 1 1 auto;
         padding: 1rem;
-      } */
+      } 
 
-      /* .modal-footer {
+       #contentSlot> ::slotted(.modal-footer) {
         display: flex;
         -webkit-box-align: center;
         align-items: center;
@@ -64,7 +64,7 @@
         justify-content: flex-end;
         padding: 1rem;
         border-top: 1px solid #e9ecef;
-      } */
+      } 
       /* The Close Button */
 
       .close {
@@ -163,7 +163,7 @@
               this.label = element.getAttribute('label');
             }
             element.classList.add('nylon-selected');
-            this.dispatchEvent(new CustomEvent('nylonDialogChanged', { detail: { element: element, params: this.params } }));
+            this.dispatchEvent(new CustomEvent('nylon-dialog-changed', { detail: { element: element, params: this.params } }));
 
             this.children[i]._params = this.params
 
