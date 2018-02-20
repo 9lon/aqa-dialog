@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
-
+<link rel="import" href="../aqa-font/aqa-mitr-font.html">
 <dom-module id="nylon-dialog">
   <template>
     <style>
@@ -29,17 +29,51 @@
         border: 1px solid #fefefe;
         border-radius: 4px;
         margin: 2rem auto auto auto;
-        padding: 20px;
-        /* width: 80%; */
         width: 50%;
       }
+
+      .modal-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+        border-top-right-radius: 0.3rem;
+        border-top-left-radius: 0.3rem;
+        position: relative;
+      }
+
+      .modal-title {
+        font-family: MitrLight;
+        margin-top: 0;
+        margin-bottom: 0;
+        line-height: 1.5;
+        font-size: 1.2rem;
+        font-weight: normal;
+      }
+
+      /* .modal-body {
+        position: relative;
+        -webkit-box-flex: 1;
+        flex: 1 1 auto;
+        padding: 1rem;
+      } */
+
+      /* .modal-footer {
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: end;
+        justify-content: flex-end;
+        padding: 1rem;
+        border-top: 1px solid #e9ecef;
+      } */
       /* The Close Button */
 
       .close {
         color: #aaaaaa;
-        float: right;
         font-size: 28px;
         font-weight: bold;
+        position: absolute;
+        top: 10px;
+        right: 15px;
       }
 
       .close:hover,
@@ -51,12 +85,21 @@
     </style>
     <div class="modal" id="modal">
       <div class="modal-content">
-        <span class="close" id="close" on-click="close">&times;</span>
-        <p>[[label]]</p>
+        <div class="modal-header">
+          <div class="close" id="close" on-click="close">&times;</div>
+          <h5 class="modal-title">[[label]]</h5>
+        </div>
         <div id="contentSlot">
           <slot></slot>
         </div>
-
+        <!-- <div class="modal-body">
+          <div id="contentSlot">
+            <slot name="body"></slot>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <slot name="footer"></slot>
+        </div> -->
       </div>
     </div>
 
@@ -72,80 +115,79 @@
      * @demo demo/index.html
      */
 
-      class NylonDialog extends Polymer.Element {
-        static get is() { return 'nylon-dialog'; }
-        static get properties() {
-          return {
-            opened: Boolean,
-            path: {
-              type: String,
-              observer: '_pathChanged'
-            },
-            label: String
-          };
-        }
+    class NylonDialog extends Polymer.Element {
+      static get is() { return 'nylon-dialog'; }
+      static get properties() {
+        return {
+          opened: Boolean,
+          path: {
+            type: String,
+            observer: '_pathChanged'
+          },
+          label: String
+        };
+      }
 
-        constructor(){
-          super()
-          window.Nylon =  window.Nylon || {}
-          window.Nylon.dialog = {}
+      constructor() {
+        super()
+        window.Nylon = window.Nylon || {}
+        window.Nylon.dialog = {}
 
-          window.Nylon.dialog.open = (path,params) => {
-            this.close()
-            if(path){
-              this.params = params
-              this.path = path
-              this.open()
-            }
-          }
-          window.Nylon.dialog.close = () => {
-            this.close()
+        window.Nylon.dialog.open = (path, params) => {
+          this.close()
+          if (path) {
+            this.params = params
+            this.path = path
+            this.open()
           }
         }
-
-        ready() {
-          super.ready();
-          this.modal = this.$.modal;
-          var btnClose = this.$.close;
-          if (this.opened) {
-            this.modal.style.display = 'block'
-          }
+        window.Nylon.dialog.close = () => {
+          this.close()
         }
+      }
 
-        _pathChanged(val, old) {
-          for (var i = 0; i < this.children.length; i++) {
-            var element = this.children[i];
-            if (val == this.children[i].getAttribute('path')) {
-              if (element.getAttribute('label')) {
-                this.label = element.getAttribute('label');
-              }
-              element.classList.add('nylon-selected');
-              this.dispatchEvent(new CustomEvent('nylonDialogChanged', {detail: {element: element, params:this.params}}));
-              
-              this.children[i]._params = this.params
-
-              if(this.children[i].nylonDialogActive){ 
-                this.children[i].nylonDialogActive(this.params)
-              }
-
-            }
-            else {
-              
-              element.classList.remove('nylon-selected')
-            }
-          }
-        }
-
-        close() {
-          this.modal.style.display = 'none'
-
-        }
-        open() {
+      ready() {
+        super.ready();
+        this.modal = this.$.modal;
+        var btnClose = this.$.close;
+        if (this.opened) {
           this.modal.style.display = 'block'
         }
       }
 
-      window.customElements.define(NylonDialog.is, NylonDialog);
+      _pathChanged(val, old) {
+        for (var i = 0; i < this.children.length; i++) {
+          var element = this.children[i];
+          if (val == this.children[i].getAttribute('path')) {
+            if (element.getAttribute('label')) {
+              this.label = element.getAttribute('label');
+            }
+            element.classList.add('nylon-selected');
+            this.dispatchEvent(new CustomEvent('nylonDialogChanged', { detail: { element: element, params: this.params } }));
 
+            this.children[i]._params = this.params
+
+            if (this.children[i].nylonDialogActive) {
+              this.children[i].nylonDialogActive(this.params)
+            }
+
+          }
+          else {
+
+            element.classList.remove('nylon-selected')
+          }
+        }
+      }
+
+      close() {
+        this.modal.style.display = 'none'
+
+      }
+      open() {
+        this.modal.style.display = 'block'
+      }
+    }
+
+    window.customElements.define(NylonDialog.is, NylonDialog);
   </script>
 </dom-module>

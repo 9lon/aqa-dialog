@@ -1,44 +1,61 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>nylon-dialog demo</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <title>nylon-dialog demo</title>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="./test-el.html">
-    <link rel="import" href="../nylon-dialog.html">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <custom-style>
-      <style is="custom-style" include="demo-pages-shared-styles">
-      </style>
-    </custom-style>
-  </head>
-  <body>
-    <div class="vertical-section-container centered">
-      <h3>Basic nylon-dialog demo</h3>
-      <demo-snippet>
-        <template>
-          <button id="btn" onclick="openDailog()">open</button>
-          <nylon-dialog id="modal" path="/a">
-            <test-el label="test A" path="/a"></test-el>
-            <div label="test B" path="/b">2</div>
-          </nylon-dialog>
-          <script>
-            function openDailog(){
-              document.getElementById('modal').open()
-            }
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="./test-el.html">
+  <link rel="import" href="../nylon-dialog.html">
+  <link rel="import" href="../nylon-dialog-body.html">
+  <link rel="import" href="../nylon-dialog-footer.html">
 
-            document.getElementById('modal').addEventListener('nylonDialogChanged',function(e){
-                console.log(e)
-              })
-          </script>
-        </template>
-      </demo-snippet>
-    </div>
-  </body>
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+
+    </style>
+  </custom-style>
+</head>
+
+<body>
+  <div class="vertical-section-container centered">
+    <h3>Basic nylon-dialog demo</h3>
+    <demo-snippet>
+      <template>
+        <button id="btn" onclick="openDailog()">open</button>
+        <nylon-dialog id="modal" path="/b">
+          <div label="test A" path="/a">
+            <nylon-dialog-body>
+              test
+            </nylon-dialog-body>
+            <nylon-dialog-footer>
+              <button>Save</button>
+            </nylon-dialog-footer>
+          </div>
+          <div label="ภาษาไทย" path="/b">
+            <nylon-dialog-body>
+              test
+            </nylon-dialog-body>
+          </div>
+        </nylon-dialog>
+        <script>
+          function openDailog() {
+            document.getElementById('modal').open()
+          }
+
+          document.getElementById('modal').addEventListener('nylonDialogChanged', function (e) {
+            console.log(e)
+          })
+        </script>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
 </html>
