@@ -32,19 +32,23 @@
         <button id="btn" onclick="openDailog()">open</button>
         <nylon-dialog id="modal">
           <test-el path-file="./test-el.html" label="test A" path="/a" lazy></test-el>
-          <div label="ภาษาไทย" path="/b">
+          <!-- <div label="ภาษาไทย" path="/b">
             <nylon-dialog-body>
               <div>test</div>
             </nylon-dialog-body>
-          </div>
+          </div> -->
         </nylon-dialog>
         <script>
           function openDailog() {
+            console.log('ie')
             Nylon.dialog.open('/a')
           }
           
           document.getElementById('modal').addEventListener('nylon-dialog-changed', function (e) {
             Polymer.importHref(e.detail.element.getAttribute('path-file'),  ()=> {
+              
+              // console.log({s:e.detail.element.shadowRoot.querySelect})
+
               e.detail.pass()
             })
           })

@@ -48,15 +48,13 @@
         font-size: 1.2rem;
         font-weight: normal;
       }
-
-        #contentSlot> ::slotted(.modal-body) {
+      /* #contentSlot> ::slotted(.modal-body) {
         position: relative;
         -webkit-box-flex: 1;
         flex: 1 1 auto;
         padding: 1rem;
-      }  
-
-       /* #contentSlot> ::slotted(.modal-footer) {
+      }   */
+      /* #contentSlot> ::slotted(.modal-footer) {
         display: flex;
         -webkit-box-align: center;
         align-items: center;
@@ -92,14 +90,6 @@
         <div id="contentSlot">
           <slot></slot>
         </div>
-        <!-- <div class="modal-body">
-          <div id="contentSlot">
-            <slot name="body"></slot>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer"></slot>
-        </div> -->
       </div>
     </div>
 
@@ -159,12 +149,29 @@
 
         for (let i = 0; i < this.children.length; i++) {
           let element = this.children[i];
-
           if (val == element.getAttribute('path')) {
-
-            const pass = _ =>{
+            const pass = _ => {
               element._params = this.params
               if (element.nylonDialogActive) {
+                // var style = element.shadowRoot.querySelector('style').innerHTML;
+                // var newStyle = `
+                //      .modal-body {
+                //         position: relative;
+                //         -webkit-box-flex: 1;
+                //         flex: 1 1 auto;
+                //         padding: 1rem;
+                //     }
+                //     .modal-footer {
+                //         display: flex;
+                //         -webkit-box-align: center;
+                //         align-items: center;
+                //         -webkit-box-pack: end;
+                //         justify-content: flex-end;
+                //         padding: 1rem;
+                //         border-top: 1px solid #e9ecef;
+                //     }
+                // `
+                // element.shadowRoot.querySelector('style').innerHTML = style + newStyle
                 element.nylonDialogActive(this.params)
               }
             }
@@ -174,14 +181,8 @@
             }
             element.classList.add('nylon-selected');
             this.dispatchEvent(new CustomEvent('nylon-dialog-changed', { detail: { element: element, params: this.params, pass } }));
-
-            if(element.getAttribute('lazy')==null)  pass()
-
-            
-
           }
           else {
-
             element.classList.remove('nylon-selected')
           }
         }

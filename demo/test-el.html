@@ -7,7 +7,12 @@
                 display: block
             }
         </style>
-        <h2>test</h2>
+        <div class="modal-body">
+            test
+        </div>
+        <div class="modal-footer">
+            <button>save</button>
+        </div>
     </template>
 
     <script>
@@ -27,8 +32,29 @@
 
             nylonDialogActive(){
                 console.log('active')
-                console.log(this._params)
+                // console.log(this._params)
+                // console.log('sss',this.shadowRoot.querySelector)
+                var style = this.shadowRoot.querySelector('style').innerHTML;
+                var newStyle = `
+                    .modal-body {
+                        position: relative;
+                        -webkit-box-flex: 1;
+                        flex: 1 1 auto;
+                        padding: 1rem;
+                    }
+                    .modal-footer {
+                        display: flex;
+                        -webkit-box-align: center;
+                        align-items: center;
+                        -webkit-box-pack: end;
+                        justify-content: flex-end;
+                        padding: 1rem;
+                        border-top: 1px solid #e9ecef;
+                    }
+                `
+                this.shadowRoot.querySelector('style').innerHTML = style + newStyle
             }
+            
         }
 
         window.customElements.define(TestEl.is, TestEl);
