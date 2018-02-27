@@ -1,14 +1,23 @@
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../aqa-styles/aqa-styles.html">
 
 <dom-module id="test-el">
     <template>
-        <style>
+        <style include="aqa-styles">
              :host {
                 display: block
             }
         </style>
         <div class="modal-body">
-            test
+            <div class="row">
+            
+                 <template is="dom-repeat" items="[1,2,3,4,5,6,7,8,10,1,2,3,4,5,6,7,8,10,1,2,3,4,5,6,7,8,10,1,2,3,4,5,6,7,8,10]">
+                    <div class="col-xs-12 col-sm-6 col-xs-4" style="margin-bottom:0.5rem">
+                        <label for="text">test</label>
+                        <input type="text" id="text">
+                    </div>
+                </template> 
+            </div>
         </div>
         <div class="modal-footer">
             <button>save</button>
@@ -30,8 +39,8 @@
                 return 'test-el';
             }
 
-            nylonDialogActive(){
-                console.log('active')
+            nylonDialogActive() {
+                // console.log('active')
                 // console.log(this._params)
                 // console.log('sss',this.shadowRoot.querySelector)
                 var style = this.shadowRoot.querySelector('style').innerHTML;
@@ -41,6 +50,8 @@
                         -webkit-box-flex: 1;
                         flex: 1 1 auto;
                         padding: 1rem;
+                        max-height: 400px;
+                        overflow-y:auto;
                     }
                     .modal-footer {
                         display: flex;
@@ -54,7 +65,7 @@
                 `
                 this.shadowRoot.querySelector('style').innerHTML = style + newStyle
             }
-            
+
         }
 
         window.customElements.define(TestEl.is, TestEl);
