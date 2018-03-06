@@ -115,7 +115,8 @@
           opened: Boolean,
           path: {
             type: String,
-            observer: '_pathChanged'
+            observer: '_pathChanged',
+            value: ''
           },
           label: String,
           width:String
@@ -131,6 +132,7 @@
           this.close()
           if (path) {
             this.params = params
+            this.path = ''
             this.path = path
             this.open()
           }
@@ -150,6 +152,7 @@
       }
 
       _pathChanged(val, old) {
+        if(val=='') return;
 
         for (let i = 0; i < this.children.length; i++) {
           let element = this.children[i];
